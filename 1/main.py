@@ -1,1 +1,4 @@
-print("Hello world!")
+import webbrowser
+
+url = input("Podaj adres strony: ")
+webbrowser.open(url)
