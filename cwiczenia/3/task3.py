@@ -1,4 +1,5 @@
 import random
+import getpass
 
 choise = 0
 player1 = ''
@@ -21,15 +22,19 @@ while True:
         print('Niepoprawny wybór')
 
 elements = ['kamien', 'papier', 'nozyce']
+playerCount1 = 0
+playerCount2 = 0
 if choise == 1:
-    computerCount = 0
-    playerCount = 0
+    player2 = 'computer'
     for x in range(iloscRund):
+
         while True:
             choiseElement = int(input("Wybierz kamień(0), papier(1) lub nożyce(2): "))
             if choiseElement == 1 or choiseElement == 0 or choiseElement == 2:
                 break
+
         computerChoise = random.randrange(3)
+
         if computerChoise == choiseElement:
             wins = 'remis'
             print(wins)
@@ -38,18 +43,44 @@ if choise == 1:
             wins = f'{player1} wins round {x}'
             print(wins)
             roundsHist.append(wins)
-            playerCount += 1
+            playerCount1 += 1
         else:
-            wins = f'computer wins round {x}'
+            wins = f'{player2} wins round {x}'
             print(wins)
             roundsHist.append(wins)
-            computerCount += 1
+            playerCount2 += 1
+
         print(elements[choiseElement], ' vs ', elements[computerChoise])
-    if playerCount > computerCount:
-        print(f"{player1} wins match")
-    elif computerCount > playerCount:
-        print(f"computer wins match")
-    else:
-        print("remis")
+
 if choise == 2:
     for x in range(iloscRund):
+        while True:
+            choiseElement1 = int(getpass.getpass(f"{player1}, Wybierz kamień(0), papier(1) lub nożyce(2): "))
+            if choiseElement1 == 1 or choiseElement1 == 0 or choiseElement1 == 2:
+                break
+        while True:
+            choiseElement2 = int(getpass.getpass(f"{player2}, Wybierz kamień(0), papier(1) lub nożyce(2): "))
+            if choiseElement2 == 1 or choiseElement2 == 0 or choiseElement2 == 2:
+                break
+        if choiseElement1 == choiseElement2:
+            wins = 'remis'
+            print(wins)
+            roundsHist.append(wins)
+        elif (choiseElement1 == 0 and choiseElement2 == 2) or (choiseElement1 == 1 and choiseElement2 == 0) or (choiseElement1 == 2 and choiseElement2 == 1):
+            wins = f'{player1} wins round {x}'
+            print(wins)
+            roundsHist.append(wins)
+            playerCount1 += 1
+        else:
+            wins = f'{player2} wins round {x}'
+            print(wins)
+            roundsHist.append(wins)
+            playerCount2 += 1
+        print(elements[choiseElement1], ' vs ', elements[choiseElement2])
+
+if playerCount1 > playerCount2:
+    print(f"{player1} wins match")
+elif playerCount2 > playerCount1:
+    print(f"{player2} wins match")
+else:
+    print("remis")
