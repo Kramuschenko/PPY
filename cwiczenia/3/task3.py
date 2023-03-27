@@ -55,12 +55,14 @@ if choise == 1:
 if choise == 2:
     for x in range(iloscRund):
         while True:
-            choiseElement1 = int(getpass.getpass(f"{player1}, Wybierz kamień(0), papier(1) lub nożyce(2): "))
-            if choiseElement1 == 1 or choiseElement1 == 0 or choiseElement1 == 2:
+            choiseElement1 = getpass.getpass(f"{player1}, Wybierz kamień(0), papier(1) lub nożyce(2): ")
+            if choiseElement1 in ('0', '1', '2'):
+                choiseElement1 = int(choiseElement1)
                 break
         while True:
-            choiseElement2 = int(getpass.getpass(f"{player2}, Wybierz kamień(0), papier(1) lub nożyce(2): "))
-            if choiseElement2 == 1 or choiseElement2 == 0 or choiseElement2 == 2:
+            choiseElement2 = getpass.getpass(f"{player2}, Wybierz kamień(0), papier(1) lub nożyce(2): ")
+            if choiseElement2 in ('0', '1', '2'):
+                choiseElement2 = int(choiseElement2)
                 break
         if choiseElement1 == choiseElement2:
             wins = 'remis'
