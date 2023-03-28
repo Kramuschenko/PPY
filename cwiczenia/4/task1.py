@@ -1,4 +1,4 @@
-def countPack(lengthPod, widthPod, lengthPan, widthPan, packCapacity):
+def panel_calc(lengthPod, widthPod, lengthPan, widthPan, packCapacity):
     area = lengthPod * widthPod * 1.1
     areaPan = lengthPan * widthPan
     panCount = area // areaPan
@@ -8,4 +8,4 @@ def countPack(lengthPod, widthPod, lengthPan, widthPan, packCapacity):
     else:
         return int(count) + 1
 
-print("Ilosc opakowan: ", countPack(10,20, 1, 2, 10))
+print("Potrzeba : " + str(panel_calc(4, 4, 0.20, 1, 10)))
