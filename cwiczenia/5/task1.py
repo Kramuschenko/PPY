@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
+
 def read_file(filename):
     data = {}
     with open(filename, 'r') as file:
@@ -25,6 +26,8 @@ def read_file(filename):
             else:
                 continue
             data[email] = student_data
+            log_message(f"File has been read {email} items.")
+
     return data
 
 
@@ -46,20 +49,25 @@ def grade_students(data):
                 grade = 2
             student_data['grade'] = grade
             student_data['status'] = 'GRADED'
+            log_message(f"Graded student with email {email} and assigned grade {grade}.")
+
 
 def delete_student(data):
     email = input("Podaj adres email studenta, którego chcesz usunąć: ")
     if email in data:
         del data[email]
         print(f"Usunięto studenta o adresie email {email}")
+        log_message(f"Deleted student with email {email}.")
     else:
         print(f"Nie znaleziono studenta o adresie email {email}")
+        log_message(f"Could not find student with email {email} to delete.")
 
 
 def add_student(data):
     email = input("Podaj adres email studenta: ")
     if email in data:
         print(f"Student o adresie email {email} już istnieje")
+        log_message(f"Failed to add new student with email {email} because this email already exists.")
         return
     first_name = input("Podaj imię studenta: ")
     last_name = input("Podaj nazwisko studenta: ")
@@ -67,17 +75,19 @@ def add_student(data):
     student_data = {'email': email, 'first_name': first_name, 'last_name': last_name, 'points': points, 'grade': '', 'status': ''}
     data[email] = student_data
     print(f"Dodano studenta {first_name} {last_name} z adresem email {email}")
+    log_message(f"Added new student with email {email}, first name {first_name}, last name {last_name}, and points {points}.")
 
 
 def print_students(data):
     for email, student_data in data.items():
         print(student_data['first_name'], student_data['last_name'], student_data['points'], student_data['grade'],
               student_data['status'])
+    log_message(f"Printed all students data.")
 
 
 def send_email(data):
     for email, student_data in data.items():
-        if student_data['status'] == 'GRADED':
+        if student_data['status'] == 'GRADED' and student_data['status'] != 'MAILED':
             grade_ = student_data['grade']
             name_ = student_data['first_name']
             last_name_ = student_data['last_name']
@@ -88,15 +98,20 @@ def send_email(data):
             msg['To'] = ', '.join([student_data['email']])
             smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
             mail = 's24124@pjwstk.edu.pl'
-            smtp_server.login(mail, '')
+            smtp_server.login(mail, 'vyftdjpumglskylb')
             smtp_server.sendmail(mail, [student_data['email']], msg.as_string())
             smtp_server.quit()
             student_data['status'] = 'MAILED'
+            log_message(f"Mail was sent to {email}.")
+
+
+def log_message(message):
+    with open('mylog.txt', 'a') as log_file:
+        log_file.write(f'{message}\n')
 
 
 def main():
     data = read_file('students.txt')
-    print(data)
     while True:
         print("\n--- Menu ---")
         print("1. Wypisz studentów")
