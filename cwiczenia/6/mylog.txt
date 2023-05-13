@@ -1,0 +1,16 @@
+Printed all students data.
+Printed all students data.
+Printed all students data.
+Printed all students data.
+Printed all students data.
+Graded student with email test@gmail.com and assigned grade 5.0.
+Graded student with email test2@gmail.com and assigned grade 5.0.
+Printed all students data.
+Printed all students data.
+Printed all students data.
+Printed all students data.
+Deleted student with email none@gmail.com.
+Printed all students data.
+Added new student with email asdfasd, first name rrrr, last name werwer, and points 40,20,20,20,100,100,100,100,100,100,100,100,100,100.
+Printed all students data.
+Mail was sent to test2@gmail.com.

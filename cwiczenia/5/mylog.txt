@@ -6,3 +6,11 @@ File has been read adamadamski@gmail.com items.
 Printed all students data.
 Graded student with email s24124@pjwstk.edu.pl and assigned grade 5.
 Graded student with email adamadamski@gmail.com and assigned grade 3.
+File has been read s24124@pjwstk.edu.pl items.
+File has been read adamadamski@gmail.com items.
+Printed all students data.
+Graded student with email s24124@pjwstk.edu.pl and assigned grade 5.
+Graded student with email adamadamski@gmail.com and assigned grade 3.
+Printed all students data.
+File has been read s24124@pjwstk.edu.pl items.
+File has been read adamadamski@gmail.com items.
