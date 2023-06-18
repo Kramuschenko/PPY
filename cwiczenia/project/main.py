@@ -15,16 +15,15 @@ from sklearn.model_selection import train_test_split
 
 warnings.filterwarnings("ignore", category=matplotlib.MatplotlibDeprecationWarning)
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/glass/glass.data"
+df = None
 headers = ["Id number", "RI", "Na", "Mg", "Al", "Si", "K", "Ca", "Ba", "Fe", "Type of glass"]
-df = pd.read_csv(url, names=headers)
 
 # Podziel dane na cechy (X) i etykiety (y)
-X = df.drop("Type of glass", axis=1)
-y = df["Type of glass"]
+X = None
+y = None
 
 # Podziel dane na zbiór treningowy i testowy
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = None, None, None, None
 
 # Połączenie z bazą danych SQLite
 conn = sqlite3.connect('glass_data.db')
@@ -49,6 +48,21 @@ CREATE TABLE IF NOT EXISTS glass (
 cursor.execute(create_table_query)
 
 
+def load_data_online():
+    global df, X, y, X_train, X_test, y_train, y_test
+
+    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/glass/glass.data"
+
+    df = pd.read_csv(url, names=headers)
+
+    # Podziel dane na cechy (X) i etykiety (y)
+    X = df.drop("Type of glass", axis=1)
+    y = df["Type of glass"]
+
+    # Podziel dane na zbiór treningowy i testowy
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
 def save_data_to_db():
     data = X.copy()
     data["Type of glass"] = y
@@ -57,10 +71,18 @@ def save_data_to_db():
 
 
 def load_data_from_db():
-    global X, y
-    data = pd.read_sql('SELECT * FROM glass', conn)
-    X = data.drop("Type of glass", axis=1)
-    y = data["Type of glass"]
+    global df, X, y, X_train, X_test, y_train, y_test
+
+    query = 'SELECT * FROM glass'
+    df = pd.read_sql(query, conn)
+
+    # Podziel dane na cechy (X) i etykiety (y)
+    X = df.drop("Type of glass", axis=1)
+    y = df["Type of glass"]
+
+    # Podziel dane na zbiór treningowy i testowy
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
     messagebox.showinfo("Wczytano dane", "Dane zostały wczytane z bazy SQLite.")
 
 
@@ -119,6 +141,11 @@ def generate_pdf():
         plt.close(fig)
 
 
+def refresh_data():
+    for index, row in df.iterrows():
+        data_table.insert("", "end", text=index, values=row.tolist())
+
+
 # Uruchomienie pętli głównej aplikacji
 if __name__ == "__main__":
     # Tworzenie głównego okna
@@ -127,20 +154,29 @@ if __name__ == "__main__":
     window.geometry("900x700")
 
     # Przyciski i pola tekstowe
-    save_data_button = tk.Button(window, text="Zapisz dane do bazy", command=save_data_to_db)
-    save_data_button.pack(pady=10)
+    button_frame_data = tk.Frame(window)
+    button_frame_data.pack(pady=10)
 
-    load_data_button = tk.Button(window, text="Wczytaj dane z bazy", command=load_data_from_db)
-    load_data_button.pack(pady=10)
+    load_data_online_button = tk.Button(button_frame_data, text="Wczytaj dane z internetu", command=load_data_online)
+    load_data_online_button.pack(side=tk.LEFT, padx=5)
 
-    train_button = tk.Button(window, text="Trenuj model", command=train_model)
-    train_button.pack(pady=10)
+    save_data_button = tk.Button(button_frame_data, text="Zapisz dane do bazy", command=save_data_to_db)
+    save_data_button.pack(side=tk.LEFT, padx=5)
 
-    save_model_button = tk.Button(window, text="Zapisz model", command=save_model)
-    save_model_button.pack(pady=10)
+    load_data_button = tk.Button(button_frame_data, text="Wczytaj dane z bazy", command=load_data_from_db)
+    load_data_button.pack(side=tk.LEFT, padx=5)
 
-    load_model_button = tk.Button(window, text="Wczytaj model", command=load_model)
-    load_model_button.pack(pady=10)
+    button_frame_model = tk.Frame(window)
+    button_frame_model.pack(pady=10)
+
+    train_button = tk.Button(button_frame_model, text="Trenuj model", command=train_model)
+    train_button.pack(side=tk.LEFT, padx=5)
+
+    save_model_button = tk.Button(button_frame_model, text="Zapisz model", command=save_model)
+    save_model_button.pack(side=tk.LEFT, padx=5)
+
+    load_model_button = tk.Button(button_frame_model, text="Wczytaj model", command=load_model)
+    load_model_button.pack(side=tk.LEFT, padx=5)
 
     new_data_label = tk.Label(window, text="Nowe dane (oddzielone przecinkami \n "
                                            "n.p. '1,1.5,2.7,1.8,1.2,1.9,0.5,1.2,0.3,0.1'):")
@@ -153,6 +189,9 @@ if __name__ == "__main__":
 
     pdf_button = tk.Button(window, text="Generuj PDF", command=generate_pdf)
     pdf_button.pack(pady=10)
+
+    refresh_button = tk.Button(window, text="Refresh", command=refresh_data)
+    refresh_button.pack(pady=10)
 
     # Tabelka do przeglądania danych
     data_table = ttk.Treeview(window)
@@ -167,9 +206,5 @@ if __name__ == "__main__":
     column_widths = [50, 80, 60, 60, 60, 60, 60, 60, 60, 60, 80]  # lista szerokości kolumn
     for header, width in zip(headers, column_widths):
         data_table.column(header, width=width)
-
-    # Wstawienie danych do tabeli
-    for index, row in df.iterrows():
-        data_table.insert("", "end", text=index, values=row.tolist())
 
     window.mainloop()
