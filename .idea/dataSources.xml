@@ -8,5 +8,17 @@
       <jdbc-url>jdbc:sqlite:C:\Users\misha.LAPTOP-54T7JJHC\Documents\python\PPY\cwiczenia\7\database.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="glass_data" uuid="0e6aa9c2-8dad-43e8-93a6-924ed19f54a4">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\misha.LAPTOP-54T7JJHC\Documents\python\PPY\cwiczenia\project\glass_data.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.40.1/org/xerial/sqlite-jdbc/3.40.1.0/sqlite-jdbc-3.40.1.0.jar</url>
+        </library>
+      </libraries>
+    </data-source>
   </component>
 </project>
