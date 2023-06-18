@@ -1,4 +1,4 @@
-import wikipedia
+import wikipediaapi
 
 
 def read_titles(filename):
@@ -8,12 +8,11 @@ def read_titles(filename):
 
 
 def get_article(title):
-    try:
-        page = wikipedia.page(title)
-        return page.content
-    except wikipedia.exceptions.PageError:
-        return ""
-    except wikipedia.exceptions.DisambiguationError:
+    w_api = wikipediaapi.Wikipedia('en')
+    page = w_api.page(title)
+    if page.exists():
+        return page.text
+    else:
         return ""
 
 
